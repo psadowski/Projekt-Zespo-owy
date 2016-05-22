@@ -1,0 +1,29 @@
+<br><br><br><br>
+<div class="container">
+    <div class="row">
+        <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-xs-8 col-xl-offset-2 col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">
+            <div class="form-group">
+                <form method ="post" action="edit_post/update_post" name="post" id="post">
+                    <div class="text-center">
+                        <label for="topic">Topic:</label>
+                    </div>
+                    <input class="form-control" type="text" name="topic" value="<%= @post.topic %>" >
+                    <br>
+                    <div class="text-center">
+                        <label for="text">Text:</label>
+                    </div>
+                    <textarea class="form-control" rows="4" cols="50" name="text" form="post">
+                        <%= @post.text %></textarea>
+                    <input name="table_name" value="<%= @post.class.table_name %>" style="display:none;">
+                    <input name="post_id" value="<%= @post.id %>" style="display:none;">
+                    <br><br>
+                    <div class="text-center">
+                         <button class="btn btn-default" value="submit" type="submit">Update</button>
+                    </div>
+                    <br>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br>

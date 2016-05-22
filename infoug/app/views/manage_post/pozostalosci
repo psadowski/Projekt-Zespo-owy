@@ -1,0 +1,194 @@
+ <% if (@user.role == 'student' and bool) or @user.role != 'student' %>
+            <table class="table table-striped admin_table">
+                <thead>
+                    <tr>
+                        <th>Department</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% @departments.each do |d| %>
+                        <% if @user.department.where(id: d.id).empty? %>
+                            <tr>
+                                <td><%= d.name %></td>
+                                <td>
+                                    <form method="post" action="manage_groups/add_department">
+                                    <input name="user_id" value="<%=@user.id %>" style="display:none;">
+                                    <input name="department_id" value="<%= d.id %>" style="display:none;">
+                                    <button value="submit" type="submit" class="btn btn-sm btn-info">Add</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% end %>
+                    <% end %>
+                </tbody>
+            </table>
+    <% end %>
+    
+    
+    
+    <% if (@user.role == 'student' and bool) or @user.role != 'student' %>
+    <table class="table table-striped admin_table">
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @subjects.each do |s| %>
+                <% if Subject.find_by(:department_id => @user.department.ids) %>
+                    <% if @user.subject.where(id: s.id).empty? %>
+                        <tr>
+                            <td><%= s.name %></td>
+                            <td><form method="post" action="manage_groups/add_subject">
+                                    <input name="user_id" value="<%=@user.id %>" style="display:none;">
+                                    <input name="subject_id" value="<%= s.id %>" style="display:none;">
+                                    <button value="submit" type="submit" class="btn btn-sm btn-info">Add</button>
+                            </form></td>
+                        </tr>
+                    <% end %>
+                <% end %>
+            <% end %>
+        </tbody>
+    </table>
+    <% end %>
+    
+    
+    
+    
+    
+    <% if (@user.role == 'student' and bool) or @user.role != 'student' %>
+    <table class="table table-striped admin_table">
+        <thead>
+            <tr>
+                <th>Department</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @groups.each do |g| %>
+                <% if Group.find_by(:subject_id => @user.subject.ids) %>
+                    <% if @user.group.where(id: g.id).empty? %>
+                        <tr>
+                            <td><%= g.name %></td>
+                            <td><form method="post" action="manage_groups/add_group">
+                                    <input name="user_id" value="<%=@user.id %>" style="display:none;">
+                                    <input name="group_id" value="<%= g.id %>" style="display:none;">
+                                    <button value="submit" type="submit" class="btn btn-sm btn-info">Add</button>
+                            </form></td>
+                        </tr>
+                    <% end %>
+                <% end %>
+            <% end %>
+        </tbody>
+    </table>
+    <% end %>
+    
+    
+    
+    
+    
+    
+    <table class="table table-striped admin_table">
+        <thead>
+            <tr>
+                <th>Department</th>
+                <% if (@user.role == 'student' and bool) or @user.role != 'student' %>
+                        <th>Action</th>
+                <% end %>
+            </tr>
+        </thead>
+        <tbody>
+            <% @user_departments.each do |u_d| %>
+            <tr>
+                <td><%= u_d.name %></td>
+                <% if (@user.role == 'student' and bool) or @user.role != 'student'%>
+                        <td>
+                            <form method="post" action="manage_groups/delete_department">
+                                <input name="user_id" value="<%=@user.id %>" style="display:none;">
+                                <input name="department_id" value="<%= u_d.id %>" style="display:none;">
+                                <button value="submit" type="submit" class="btn btn-sm btn-info">Delete</button>
+                            </form>
+                        </td>
+                <% end %>
+            </tr>
+            <% end %>
+        </tbody>
+    </table>
+    </br></br></br></br></br></br>
+   
+    
+    
+    
+    
+    
+    
+    
+    
+    </br>
+    <h1>Subject</h1>
+    </br>
+    <table class="table table-striped admin_table">
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <% if (@user.role == 'student' and bool) or @user.role != 'student' %>
+                    <th>Action</th>
+                <% end %>
+            </tr>
+        </thead>
+        <tbody>
+            <% @user_subjects.each do |u_s| %>
+            <tr>
+                <td><%= u_s.name %></td>
+                 <% if (@user.role == 'student' and bool) or @user.role != 'student' %>
+                        <td>
+                            <form method="post" action="manage_groups/delete_subject">
+                            <input name="user_id" value="<%=@user.id %>" style="display:none;">
+                            <input name="subject_id" value="<%= u_s.id %>" style="display:none;">
+                            <button value="submit" type="submit" class="btn btn-sm btn-info">Delete</button>
+                            </form>
+                        </td>
+                <% end %>
+            </tr>
+            <% end %>
+        </tbody>
+    </table>
+    </br></br></br></br></br></br>
+    
+    
+    
+    
+    
+    
+    </br>
+    <h1>GROUPS</h1>
+    </br>
+    <table class="table table-striped admin_table">
+        <thead>
+            <tr>
+                <th>Group</th>
+                <% if (@user.role == 'student' and bool) or @user.role != 'student' %>
+                    <th>Action</th>
+                <% end %>
+            </tr>
+        </thead>
+        <tbody>
+            <% @user_groups.each do |u_g| %>
+            <tr>
+                <td><%= u_g.name %></td>
+                <% if (@user.role == 'student' and bool) or @user.role != 'student' %>
+                    <td><form method="post" action="manage_groups/delete_group">
+                            <input name="user_id" value="<%=@user.id %>" style="display:none;">
+                            <input name="group_id" value="<%= u_g.id %>" style="display:none;">
+                            <button value="submit" type="submit" class="btn btn-sm btn-info">Delete</button>
+                    </form></td>
+                <% end %>
+            </tr>
+            <% end %>
+        </tbody>
+    </table>
+    </br></br></br></br></br></br>
+    
+</div>

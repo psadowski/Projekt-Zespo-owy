@@ -1,0 +1,10 @@
+.posts-wrapper
+  .row.profile-header
+    .col-md-6
+      .user-name-and-follow
+        %h3.profile-user-name
+          = @user.name
+        %span
+          - if @user == current_user
+            = link_to 'Edit Profile', edit_password_path(@user.name),
+                                      class: 'btn edit-button'

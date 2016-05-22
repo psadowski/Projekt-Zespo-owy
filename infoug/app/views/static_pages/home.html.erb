@@ -1,0 +1,68 @@
+<br><br><br>
+<div class="container">
+   <form method="post" action="static_pages/filter">
+                <ul id="menu">
+                        <div class="row">
+                            <div class="col-xl-5 col-lg-5 col-md-5 col-sm-5 col-xs-5 col-xl-offset-4 col-lg-offset-4 col-md-offset-4 col-sm-offset-4 col-xs-offset-3">
+         
+                    <% if cookies[:dep_filtr]==0.to_s %>
+                        <li><button class="btn btn-danger btn-default" type="submit" value="department" name="show_department_posts">Departments</button></li>
+                    <% else %>
+                        <li><button class="btn btn-success btn-default" type="submit" value="department" name="show_department_posts">Departments</button></li>
+                    <% end %>
+                    <%if cookies[:sub_filtr]==0.to_s %>
+                        <li><button class="btn btn-danger btn-default" type="submit" value="subject" name="show_subject_posts">Subjects</button></li>
+                    <% else %>
+                        <li><button class="btn btn-success btn-default" type="submit" value="subject" name="show_subject_posts">Subjects</button></li>
+                    <% end %>
+                    <% if cookies[:gro_filtr]==0.to_s %>
+                        <li><button class="btn btn-danger btn-default" type="submit" value="group" name="show_group_posts">Groups</button></li>
+                    <% else %>
+                        <li><button class="btn btn-success btn-default" type="submit" value="group" name="show_group_posts">Groups</button></li>
+                    <% end %>
+                </ul> 
+            </form>
+        </div>
+        <div class="text-center">
+            <br><%= will_paginate @all_posts %>
+        </div>
+    </div>
+
+    <div class="posts-wrapper">
+    <% @all_posts.each do  |a_p| %>
+        <% if (a_p.class.table_name == 'post_departments' and cookies[:dep_filtr] == 1.to_s) or
+            (a_p.class.table_name == 'post_subjects' and cookies[:sub_filtr] == 1.to_s) or
+            (a_p.class.table_name == 'post_groups' and cookies[:gro_filtr] == 1.to_s) %>
+
+                <div class="post">
+                    <div class="post-head">
+                        <div class="user-name">
+                            <% if a_p.class.table_name == 'post_departments' %>
+                                <%= Department.find(a_p.department_id).name %>
+                            <% elsif a_p.class.table_name == 'post_subjects' %>
+                                <%= Department.find(Subject.find(a_p.subject_id).department_id).name + ' / ' %>
+                                <%= Subject.find(a_p.subject_id).name %>
+                            <% elsif a_p.class.table_name == 'post_groups' %>
+                                <%= Department.find(Subject.find(Group.find(a_p.group_id).subject_id).department_id).name + ' / ' %>
+                                <%= Subject.find(Group.find(a_p.group_id).subject_id).name + ' / ' %>
+                                <%= Group.find(a_p.group_id).name %>
+                            <% end %>
+                        </div>
+                        <div class="time-ago">
+                             <%=  a_p.updated_at.strftime("%F\t%T") %>
+                        </div>
+                    </div>
+                    <div class="post-bottom">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <div class="topic"><%= a_p.topic %></div>
+                                <div class="text"><%= a_p.text %></div>
+                                <div class="autor"><%= User.find(a_p.user_id).surname+" "+User.find(a_p.user_id).name %></div>
+                            </div>
+                        </div>
+                    </div>   
+                </div>        
+        <% end %>
+    <% end %>
+    </div>
+</div>

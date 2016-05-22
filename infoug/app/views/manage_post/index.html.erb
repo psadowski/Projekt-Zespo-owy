@@ -1,0 +1,108 @@
+<br><br><br><br>
+<div class="container">
+    <div class="row">
+        <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-xs-8 col-xl-offset-2 col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">
+            <div class="form-group">
+                <form method ="post" action="manage_post/add_post" name="post" id="post">
+                    <div class="text-center">
+                        <label for="topic">Topic:</label>
+                    </div>
+                    <input  class="form-control" type="text" name="topic" value="Topic" onfocus="if(this.value == 'Topic') { this.value = ''; }" onfocusout="if(this.value =='') {this.value='Topic';}">
+                    <br>
+                    <div class="text-center">
+                        <label for="text">Text:</label>
+                    </div>
+                        <textarea class="form-control" rows="5" cols="50" name="text" form="post" onfocus="if(this.value == 'Enter text here...') { this.value = ''; }" onfocusout="if(this.value =='') {this.value='Enter text here...';}">
+                            Enter text here...</textarea>
+                    <br>
+                    <input value="<%= current_user.id %>" style="display:none;" name="user_id">
+                    <div class="text-center">
+                        <div class="dropdown-list">
+                            <span class="list-group">
+                                <div class="text-center">
+                                    <p>Departmens</p>
+                                </div>
+                                <select class="selectpicker dep" id="dep" multiple data-live-search="true" data-actions-box="true" name="posts_to_department[]" form="post">
+                                    <% @user_departments.each do |u_d| %>
+                                      <option  style="{display:inline}" value="<%= u_d.id %>"> <%= u_d.name %></option>
+                                    <% end %>
+                                </select>
+                            </span>
+                            <span class="list-group">
+                                <div class="text-center">
+                                    <p>Subjects</p>
+                                </div>
+                                <select  class="selectpicker sub" id="sub" multiple data-live-search="true" data-actions-box="true" name="posts_to_subject[]" form="post">
+                                    <% @user_subjects.each do |u_s| %>
+                                        <option   value="<%= u_s.id %>"><%= u_s.name %></option>
+                                    <% end %>
+                                </select>
+                            </span>
+                            <span class="list-group">
+                                <div class="text-center">
+                                    <p>Groups</p>
+                                </div>
+                                <select class="selectpicker gro" id="gro" multiple data-live-search="true" data-actions-box="true" name="posts_to_group[]" form="post">
+                                    <% @user_groups.each do |u_g| %>
+                                        <option  value="<%= u_g.id %>"><%= u_g.name %></option>
+                                    <% end %>
+                                </select>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-default post-button text-center" value="submit" type="submit">Post</button>
+                    </div>                
+                </form>
+            </div>
+        </div>
+    </div>
+    <br>
+
+
+    <div class="posts-wrapper">
+        <div class="info">All Your posts.</div>
+        <% @user_posts.each do |u_p| %>
+                <div class="post">
+                    <div class="post-head">
+                        <div class="user-name">
+                            <% if u_p.class.table_name == 'post_departments' %>
+                                <%= Department.find(u_p.department_id).name %>
+                            <% elsif u_p.class.table_name == 'post_subjects' %>
+                                <%= Department.find(Subject.find(u_p.subject_id).department_id).name + ' / ' %>
+                                <%= Subject.find(u_p.subject_id).name %>
+                            <% elsif u_p.class.table_name == 'post_groups' %>
+                                <%= Department.find(Subject.find(Group.find(u_p.group_id).subject_id).department_id).name + ' / ' %>
+                                <%= Subject.find(Group.find(u_p.group_id).subject_id).name + ' / ' %>
+                                <%= Group.find(u_p.group_id).name %>
+                             <% end %>
+                        </div>
+                        <div class="time-ago">
+                            <%=  u_p.updated_at.strftime("%F\t%T") %>
+                        </div>
+                    </div>
+                    <div class="post-bottom">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <div class="topic"><%= u_p.topic %></div>
+                                <div class="text"><%= u_p.text %></div>
+                                <div class="autor"><%= User.find(u_p.user_id).surname+" "+User.find(u_p.user_id).name %></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post_managment">
+                        <form method ="post" action="manage_post/delete_post" name="post">
+                            <input name="post_id" value="<%= u_p.id %>" style="display:none;">
+                            <input name="table_name" value="<%= u_p.class.table_name %>" style="display:none;">
+                            <button class="btn btn-default" value="submit" type="submit">Delete</button>
+                        </form>
+                        <form method="post" action="manage_post/edit_post">
+                            <input name="post_id" value="<%= u_p.id %>" style="display:none;">
+                            <input name="table_name" value="<%= u_p.class.table_name %>" style="display:none;">
+                            <button class="btn btn-default" value="submit" type="submit">Edit</button>
+                        </form>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+</div>

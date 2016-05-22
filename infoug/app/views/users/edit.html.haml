@@ -1,0 +1,9 @@
+.posts-wrapper
+  .post
+    .post-body
+      .image-wrap
+        = simple_form_for @user, url: {action: "update"}, html: { multipart: true } do |f|
+          .row
+          .row
+          .form-group.text-center
+            = f.button :submit, 'Update Profile', class: 'btn btn-success'
